@@ -27,10 +27,6 @@ body = {
     "machineType": "e2-small",
     "metadata": {
       "items": [
-          {
-              "key": "block-project-ssh-keys",
-              "value": "true"
-            },
         {
           "key": "ssh-keys",
           "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSH6zOb41hoGE2NcYrYIhLlAsizy1yaE5P25bD9DIQ7iralJNQsR879XSki5YpSSlmIGp4d8sSCS9hWTPpBb+ogOVtmluQ/pLdsycjKJ0qOT487bEQLF9aKIPvZCQ8dwS7d+EURk1x4/PpnCwCZZWaKHKNmdn5OlVDtkra/iZUgs53I4yQ1WBD4CUbEsz87jIP2m8/p5BCfT9YfTqiHA/dT055lQ5HCG6bdW2lfZQFwZEFoLk++a1aB61HLJNjqWzuc3BeG2UYaDd48aLGTHmfjtJUSStOUvO7Z2yxfn7wFLA5dWH37hbTZFmTYfNrZbujftuQK/cA6neNi/OwVuNrq/PfSqutVbs3eTyptDqthIa5nP5MKr5cKEiK/8S/spcBjHXS6y8QQxJtYW143ZZiMEXqb+N0e8HpMAD1VfkMEuaPRTO1iS0pSTPY8DldZb0zvuiWI2FuCgpQ8w0kiSMCNcZrXrVPSdfNI0pe3gvxRhfXOnfgU1AuUJf40OZ2Cy0= root@a01zhangtao-test"
