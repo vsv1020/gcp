@@ -6,6 +6,7 @@ BEFORE RUNNING:
    https://console.developers.google.com/apis/api/sheets
 2. Install the Python client library for Google APIs by running
    `pip install --upgrade google-api-python-client`
+3. This example is used with service account.  The Sheets need shared for service account.
 """
 from pprint import pprint
 
