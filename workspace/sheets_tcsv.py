@@ -1,11 +1,7 @@
 from __future__ import print_function
 import os.path
-#from googleapiclient.discovery import build
-#from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient import discovery
 from oauth2client.service_account import ServiceAccountCredentials
-#from google.auth.transport.requests import Request
-#from google.oauth2.credentials import Credentials
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
