@@ -48,4 +48,4 @@ request = service.spreadsheets().values().get(spreadsheetId=spreadsheet_id, rang
 response = request.execute()
 
 # TODO: Change code below to process the `response` dict:
-pprint(response)
+print(response)
