@@ -123,6 +123,7 @@ celerybeat.pid
 .env
 .venv
 env/
+google_cloud/
 venv/
 ENV/
 env.bak/
