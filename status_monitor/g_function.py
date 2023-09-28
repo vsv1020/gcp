@@ -1,4 +1,5 @@
 import functions_framework
+from google.cloud import storage
 import requests
 import json
 import os
@@ -9,15 +10,41 @@ import hashlib
 import base64
 
 
+def blob_init(bucket_name,file_name):
+    # 初始化 Cloud Storage 客户端
+    client = storage.Client()
+    bucket = client.get_bucket(bucket_name)
+    blob = bucket.blob(file_name)
+    return blob
 
-def check_feed(rss_url,webhook,webhook_key):
+
+def check_feed(blob,rss_url,webhook,webhook_key):
     # 解析 RSS feed
     feed = feedparser.parse(rss_url)
     new_entry = feed.entries
 
+    # 读取上次更新的信息
+    last_data = blob.download_as_text().strip() or '{}' 
+    ldata = json.loads(last_data)
+
+    # 获取上次更新的标题
+    last_entry_title = ldata.get('LAST_ENTRY_TITLE')
+    # 获取上次更新的链接
+    last_entry_link = ldata.get('LAST_ENTRY_LINK')
+
+
     # 获取所有的信息
     for entry in new_entry:
-        webhook_send(webhook, webhook_key, entry)
+        if last_entry_title == entry.title and last_entry_link == entry.link:
+            return 'No new entry'
+        else:
+            webhook_send(webhook, webhook_key, entry)
+            variables = {
+                'LAST_ENTRY_TITLE': entry.title,
+                'LAST_ENTRY_LINK': entry.link
+            }
+            # 更新上次更新的信息
+            blob.upload_from_string(json.dumps(variables))
 
     return("ok")
 
@@ -78,7 +105,10 @@ def hello_http(request):
     rss_url = os.getenv('RSS_URL')
     webhook = os.getenv('webhook')
     webhook_key = os.getenv('webhook_key')
+    bucket_name = os.getenv('BUCKET_NAME')
+    file_name = os.getenv('FILE_NAME')
 
-    check_feed(rss_url,webhook,webhook_key)
+    blob = blob_init(bucket_name,file_name)
+    check_feed(blob,rss_url,webhook,webhook_key)
 
     return("ok")

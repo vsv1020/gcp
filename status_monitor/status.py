@@ -29,9 +29,9 @@ def check_feed(rss_url):
     # print(new_entry.summary)
 
     # 获取上次更新的标题
-    last_entry_title = os.getenv('last_entry_title')
+    last_entry_title = os.getenv('LAST_ENTRY_TITLE') 
     # 获取上次更新的链接
-    last_entry_link = os.getenv('last_entry_link')
+    last_entry_link = os.getenv('LAST_ENTRY_LINK') 
 
     # 获取所有的信息
     for entry in new_entry:
