@@ -47,12 +47,12 @@ def check_feed(rss_url):
             return 'No new entry'
         else:
             # 更新环境变量
-            os.environ['last_entry_title'] = entry.title
-            os.environ['last_entry_link'] = entry.link
+            os.environ['LAST_ENTRY_TITLE'] = entry.title
+            os.environ['LAST_ENTRY_LINK'] = entry.link
             
             # 更新.env文件
-            set_key('.env', 'last_entry_title', entry.title)
-            set_key('.env', 'last_entry_link', entry.link)
+            set_key('.env', 'LAST_ENTRY_TITLE', entry.title)
+            set_key('.env', 'LAST_ENTRY_LINK', entry.link)
 
             # 发送消息
             webhook_send(webhook, webhook_key, entry)
@@ -109,6 +109,4 @@ def webhook_send(webhook, webhook_key, message):
     return(r.text)
 
 if __name__ == '__main__':
-    # 获取环境变量
-
     check_feed(rss_url)
