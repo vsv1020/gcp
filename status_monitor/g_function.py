@@ -8,7 +8,7 @@ import time
 import hmac
 import hashlib
 import base64
-
+import datetime
 
 def blob_init(bucket_name,file_name):
     # 初始化 Cloud Storage 客户端
@@ -22,30 +22,72 @@ def check_feed(blob,rss_url,webhook,webhook_key):
     # 解析 RSS feed
     feed = feedparser.parse(rss_url)
     new_entry = feed.entries
+    print(len(new_entry))
 
     # 读取上次更新的信息
     last_data = blob.download_as_text().strip() or '{}' 
     ldata = json.loads(last_data)
 
-    # 获取上次更新的标题
-    last_entry_title = ldata.get('LAST_ENTRY_TITLE')
-    # 获取上次更新的链接
-    last_entry_link = ldata.get('LAST_ENTRY_LINK')
-
-
+    info = []
+    # 把title放到一个数组里面
+    last_entry_title = []
+    for d in ldata:
+        last_entry_title.append(d['LAST_ENTRY_TITLE'])
+        variables = {
+            'LAST_ENTRY_TITLE': d['LAST_ENTRY_TITLE'],
+            'LAST_ENTRY_LINK': d['LAST_ENTRY_LINK']
+        }
+        info.append(variables)
+    
+    
     # 获取所有的信息
     for entry in new_entry:
-        if last_entry_title == entry.title and last_entry_link == entry.link:
-            return 'No new entry'
+
+        # 将更新更新到一个数组里面
+        if entry.title in last_entry_title:
+            pass
         else:
-            webhook_send(webhook, webhook_key, entry)
             variables = {
                 'LAST_ENTRY_TITLE': entry.title,
                 'LAST_ENTRY_LINK': entry.link
             }
-            # 更新上次更新的信息
-            blob.upload_from_string(json.dumps(variables))
+            info.append(variables)
+            print("----------------------")
+            webhook_send(webhook, webhook_key, entry)
+            
+    # 更新本次更新的信息
+    blob.upload_from_string(json.dumps(info))
+            
+    return("ok")
+    # 解析 RSS feed
+    feed = feedparser.parse(rss_url)
+    new_entry = feed.entries
 
+    # 读取上次更新的信息
+    last_data = blob.download_as_text().strip() or '{}' 
+    ldata = json.loads(last_data)
+    
+    info = []
+    # 获取所有的信息
+    for entry in new_entry:
+
+        # 将更新更新到一个数组
+
+        for d in ldata:
+            if d['LAST_ENTRY_TITLE'] == entry.title and d['LAST_ENTRY_LINK'] == entry.link:
+                return 'No new entry'
+                break
+        else:
+            variables = {
+                'LAST_ENTRY_TITLE': entry.title,
+                'LAST_ENTRY_LINK': entry.link
+            }
+            info.append(variables)
+            webhook_send(webhook, webhook_key, entry)
+            
+    # 更新本次更新的信息
+    blob.upload_from_string(json.dumps(info))
+            
     return("ok")
 
 def gen_sign(timestamp, secret):
@@ -112,3 +154,5 @@ def hello_http(request):
     check_feed(blob,rss_url,webhook,webhook_key)
 
     return("ok")
+
+
